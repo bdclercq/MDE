@@ -1,0 +1,154 @@
+Model ScheduleModel{
+    Node Schedule{
+      w_name: String{id};
+      //check: $workers.allInstances().exists(a|a.name=w_name)$
+      planning: Steps[1..*];
+    }
+
+    Node Steps{
+      duration: int = 1;
+      mach: String;
+      //check: $machines.exists(a|a.name=self.mach)$
+    }
+
+    Node Movement: Steps{
+      //empty
+    }
+
+    Node Operate: Steps{
+      //operates: machine[0..1];
+    }
+    checkEmp: $Steps.allInstances().forAll(x|x.emp.isDefined())$
+    checkMach: $Steps.allInstances().forAll(x|x.mach.isDefined())$
+}
+
+Model Productionsystem imports ScheduleModel{
+
+  Node workers{
+    name: String {id};
+    schedule: Schedule[1];
+    //check: $schedule.exists(b|b.w_name=self.name)$
+  }
+
+  //Node infrastructure{
+//    segments: belt[0..*];
+  //  machines: machine[0..*];
+  //}
+
+  abstract Node item{
+    is_on: belt[0..1];
+  }
+
+  Node sphere: item{
+  //add stuff
+  }
+
+  Node cube: item{
+  //add stuff
+  }
+
+  Node assembledItem: item{
+
+  }
+
+  abstract Node belt{
+    items: item[0..1];
+  }
+
+  Node straight: belt{
+    seg_in: belt[1];
+    seg_out: belt[1];
+  }
+
+  Node split: belt{
+    seg_in: belt[1];
+    seg_out: belt[2];
+  }
+
+  Node join: belt{ //items must be outputted in order of arrival
+    in_left: belt[1];
+    in_right: belt[1];
+    out: belt[1];
+    items: item[0..*] {ordered};
+  }
+
+  Node machine: belt{
+    name: String{id};
+    //check: $self.name.matches("[A-Z][a-z]*[0-9]*")$
+    operator: workers[0..1];
+    operated: int = 0;
+  }
+
+  Node arrival_cube: machine{
+    seg_out: belt[1];
+    items: cube[0..*];
+  }
+
+  Node arrival_sphere: machine{
+    seg_out: belt[1];
+    items: sphere[0..*];
+  }
+
+  Node assembly: machine{
+    in_cube: belt[1]; // don't start if not connected to cubes
+    in_sphere: belt[1]; // don't start if not connected to spheres
+    items: assembledItem[0..*];  //out
+    out: belt[1];
+  }
+
+  Node inspection: machine{
+    in: belt[1];
+    out_fix: belt[1];
+    out_destroy: belt[1];
+    out_accept: belt[1];
+  }
+
+  Node loading_bay: machine{
+    in_belt: belt[1];
+  }
+
+  Node fixer: machine{
+    in_belt: belt[1];
+    out_belt: belt[1];
+  }
+  Node incinerator: machine{
+    in_belt: belt[1];
+  }
+
+  checkNames: $machine.allInstances().forAll(x|x.name.matches("[A-Z][a-z]*[0-9]*"))$
+}
+
+Productionsystem PS1{
+  workers r{name="Randy"; schedule=sched1;}
+  //workers l{name="Len";schedule=planning2;}
+  //workers b{name="Brent"; schedule=planning3;}
+//  workers a{name="A1";}
+//  workers c{name="C1";}
+//  workers d{name="D1";}
+//  workers e{name="E1";}
+
+  straight s1{seg_in=ac; seg_out=assemble;}
+  straight s2{seg_in=as; seg_out=assemble;}
+  arrival_cube ac{name="Ac1"; seg_out=s1;}
+  arrival_sphere as{name="As1"; seg_out=s2;}
+  assembly assemble{name="As2"; in_cube=s1; in_sphere=s2; out=j1;}
+
+  join j1{in_left=assemble; in_right=s5; out=ic;}
+  inspection ic{name="I1"; in=j1; out_fix=s3; out_destroy=oven; out_accept=s4;}
+
+  straight s3{seg_in=ic; seg_out=fr;}
+  straight s4{seg_in=ic; seg_out=lb;}
+  straight s5{seg_in=fr; seg_out=j1;}
+
+
+  loading_bay lb{name="Lb1"; in_belt=s4;}
+  fixer fr{name="Fr1"; in_belt=s3; out_belt=s5;}
+  incinerator oven{name="Ov1"; in_belt=ic;}
+}
+
+ScheduleModel planning1{
+  Schedule sched1{w_name="Randy";}
+  Operate o1{mach="Ac1";duration=2;}
+  Movement m1{mach="As1";}
+  Operate o2{mach="As1";}
+}

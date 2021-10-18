@@ -1,0 +1,8 @@
+operation main(){
+
+}
+
+operation produceCube(){
+  var c : cube;
+
+}
