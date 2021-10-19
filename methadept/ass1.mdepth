@@ -2,29 +2,32 @@ Model ScheduleModel{
     Node Schedule{
       w_name: String{id};
       //check: $workers.allInstances().exists(a|a.name=w_name)$
-      planning: Steps[1..*];
+      planning: Steps[1..*] {ordered};
     }
 
     Node Steps{
-      duration: int = 1;
-      mach: String;
+      duration: int;
       //check: $machines.exists(a|a.name=self.mach)$
     }
 
     Node Movement: Steps{
+      moving_to_machine: String;
+      duration: int = 1;
       //empty
     }
 
     Node Operate: Steps{
+      operating_machine: String;
       //operates: machine[0..1];
     }
-    checkEmp: $Steps.allInstances().forAll(x|x.emp.isDefined())$
-    checkMach: $Steps.allInstances().forAll(x|x.mach.isDefined())$
+    //checkEmp: $Steps.allInstances().forAll(x|x.emp.isDefined())$
+    checkOperatingMachineExists: $Steps.allInstances().forAll(x|x.operating_machine.isDefined())$
+    checkMovingToMachineExists: $Steps.allInstances().forAll(x|x.moving_to_machine.isDefined())$
 }
 
 Model Productionsystem imports ScheduleModel{
 
-  Node workers{
+  Node Worker{
     name: String {id};
     schedule: Schedule[1];
     //check: $schedule.exists(b|b.w_name=self.name)$
@@ -35,120 +38,188 @@ Model Productionsystem imports ScheduleModel{
   //  machines: machine[0..*];
   //}
 
-  abstract Node item{
-    is_on: belt[0..1];
+  abstract Node Item{
+    is_on: Belt[0..1];
+    //const1: $self.is_on.size()<=1$
   }
 
-  Node sphere: item{
+  Node Sphere: Item{
   //add stuff
   }
 
-  Node cube: item{
+  Node Cube: Item{
   //add stuff
   }
 
-  Node assembledItem: item{
+  Node AssembledItem: Item{
 
   }
 
-  abstract Node belt{
-    items: item[0..1];
+  abstract Node Belt{
+    items: Item[0..1];
   }
 
-  Node straight: belt{
-    seg_in: belt[1];
-    seg_out: belt[1];
+  Node Straight: Belt{
+    seg_in: Belt[0..1];
+    seg_out: Belt[0..1];
   }
 
-  Node split: belt{
-    seg_in: belt[1];
-    seg_out: belt[2];
+  Node Split: Belt{
+    seg_in: Belt[0..1];
+    seg_out_1: Belt[0..1];
+    seg_out_2: Belt[0..1];
+    alternator: Boolean = true;
   }
 
-  Node join: belt{ //items must be outputted in order of arrival
-    in_left: belt[1];
-    in_right: belt[1];
-    out: belt[1];
-    items: item[0..*] {ordered};
+  Node Join: Belt{ //items must be outputted in order of arrival
+    in_left: Belt[0..1];
+    in_right: Belt[0..1];
+    out: Belt[0..1];
+    items: Item[0..*] {ordered};
   }
 
-  Node machine: belt{
+  Node Machine: Belt{
     name: String{id};
     //check: $self.name.matches("[A-Z][a-z]*[0-9]*")$
-    operator: workers[0..1];
+    operator: Worker[0..1];
     operated: int = 0;
   }
 
-  Node arrival_cube: machine{
-    seg_out: belt[1];
-    items: cube[0..*];
+  Node ArrivalCube: Machine{
+    seg_out: Belt[0..1];
+    items: Cube[0..1];
   }
 
-  Node arrival_sphere: machine{
-    seg_out: belt[1];
-    items: sphere[0..*];
+  Node ArrivalSphere: Machine{
+    seg_out: Belt[0..1];
+    items: Sphere[0..1];
   }
 
-  Node assembly: machine{
-    in_cube: belt[1]; // don't start if not connected to cubes
-    in_sphere: belt[1]; // don't start if not connected to spheres
-    items: assembledItem[0..*];  //out
-    out: belt[1];
+  Node Assembly: Machine{
+    in_cube: Belt[0..1]; // don't start if not connected to cubes
+    in_sphere: Belt[0..1]; // don't start if not connected to spheres
+    items: AssembledItem[0..1];  //out
+    out: Belt[0..1];
   }
 
-  Node inspection: machine{
-    in: belt[1];
-    out_fix: belt[1];
-    out_destroy: belt[1];
-    out_accept: belt[1];
+  Node Inspection: Machine{
+    in: Belt[0..1];
+    in_item: Item[0..1];
+    out_fix: Belt[0..1];
+    out_destroy: Belt[0..1];
+    out_accept: Belt[0..1];
+
+    enum resultEnum {FIX, DESTROY, ACCEPT};
   }
 
-  Node loading_bay: machine{
-    in_belt: belt[1];
+  Node LoadingBay: Machine{
+    in_belt: Belt[0..1];
+    item_storage: Item[0..*];
   }
 
-  Node fixer: machine{
-    in_belt: belt[1];
-    out_belt: belt[1];
+  Node Fixer: Machine{
+    in_belt: Belt[0..1];
+    out_belt: Belt[0..1];
   }
-  Node incinerator: machine{
-    in_belt: belt[1];
+  Node Incinerator: Machine{
+    in_belt: Belt[0..1];
   }
 
-  checkNames: $machine.allInstances().forAll(x|x.name.matches("[A-Z][a-z]*[0-9]*"))$
+  checkNames: $Machine.allInstances().forAll(x|x.name.matches("[A-Z][a-z]*[0-9]*"))$
 }
 
 Productionsystem PS1{
-  workers r{name="Randy"; schedule=sched1;}
-  //workers l{name="Len";schedule=planning2;}
-  //workers b{name="Brent"; schedule=planning3;}
-//  workers a{name="A1";}
-//  workers c{name="C1";}
-//  workers d{name="D1";}
-//  workers e{name="E1";}
 
-  straight s1{seg_in=ac; seg_out=assemble;}
-  straight s2{seg_in=as; seg_out=assemble;}
-  arrival_cube ac{name="Ac1"; seg_out=s1;}
-  arrival_sphere as{name="As1"; seg_out=s2;}
-  assembly assemble{name="As2"; in_cube=s1; in_sphere=s2; out=j1;}
+  Operate o_randy_1{operating_machine="Arrivalcube1";duration=4;}
+  Movement m_randy_1{moving_to_machine="Arrivalsphere1";}
+  Operate o_randy_2{operating_machine="Arrivalsphere1";duration=4;}
+  Schedule schedule_randy_1{w_name="Randy"; planning=[o_randy_1, m_randy_1, o_randy_2];}
+  Worker randy{name="Randy"; schedule=schedule_randy_1;}
 
-  join j1{in_left=assemble; in_right=s5; out=ic;}
-  inspection ic{name="I1"; in=j1; out_fix=s3; out_destroy=oven; out_accept=s4;}
+  Operate o_dogu_1{operating_machine="Assembler1";duration=4;}
+  Movement m_dogu_1{moving_to_machine="Inspector1";}
+  Operate o_dogu_2{operating_machine="Inspector1";duration=4;}
+  Schedule schedule_dogu_1{w_name="Dogu"; planning=[o_dogu_1, m_dogu_1, o_dogu_2];}
+  Worker dogu{name="Dogu"; schedule=schedule_dogu_1;}
 
-  straight s3{seg_in=ic; seg_out=fr;}
-  straight s4{seg_in=ic; seg_out=lb;}
-  straight s5{seg_in=fr; seg_out=j1;}
+  Operate o_bo_1{operating_machine="Loadingbay1";duration=4;}
+  Movement m_bo_1{moving_to_machine="Fixer1";}
+  Operate o_bo_2{operating_machine="Fixer1";duration=4;}
+  Movement m_bo_2{moving_to_machine="Incinerator1";}
+  Operate o_bo_3{operating_machine="Incinerator1";duration=4;}
+  Schedule schedule_bo_1{w_name="Bo"; planning=[o_bo_1, m_bo_1, o_bo_2, m_bo_2, o_bo_3];}
+  Worker bo{name="Bo"; schedule=schedule_bo_1;}
 
 
-  loading_bay lb{name="Lb1"; in_belt=s4;}
-  fixer fr{name="Fr1"; in_belt=s3; out_belt=s5;}
-  incinerator oven{name="Ov1"; in_belt=ic;}
+  ArrivalCube arrival_cube{name="Arrivalcube1"; seg_out=s1;}
+  ArrivalSphere arrival_sphere{name="Arrivalsphere1"; seg_out=s2;}
+  Straight s1{seg_in=arrival_cube; seg_out=assembler1;}
+  Straight s2{seg_in=arrival_sphere; seg_out=assembler1;}
+
+  Assembly assembler1{name="Assembler1"; in_cube=s1; in_sphere=s2; out=join1;}
+  Join join1{in_left=assembler1; in_right=s5; out=inspector1;}
+  Inspection inspector1{name="Inspector1"; in=join1; out_fix=s3; out_destroy=incinerator1; out_accept=s4;}
+
+  Straight s3{seg_in=inspector1; seg_out=fixer1;}
+  Straight s4{seg_in=inspector1; seg_out=loading_bay1;}
+  Straight s5{seg_in=fixer1; seg_out=join1;}
+
+
+  LoadingBay loading_bay1{name="Loadingbay1"; in_belt=s4;}
+  Fixer fixer1{name="Fixer1"; in_belt=s3; out_belt=s5;}
+  Incinerator incinerator1{name="Incinerator1"; in_belt=inspector1;}
 }
 
-ScheduleModel planning1{
-  Schedule sched1{w_name="Randy";}
-  Operate o1{mach="Ac1";duration=2;}
-  Movement m1{mach="As1";}
-  Operate o2{mach="As1";}
+Productionsystem PS2{
+
+  Operate o_randy_1{operating_machine="Arrivalcube1";duration=4;}
+  Movement m_randy_1{moving_to_machine="Arrivalsphere1";}
+  Operate o_randy_2{operating_machine="Arrivalsphere1";duration=4;}
+  Schedule schedule_randy_1{w_name="Randy"; planning=[o_randy_1, m_randy_1, o_randy_2];}
+  Worker randy{name="Randy"; schedule=schedule_randy_1;}
+
+  Operate o_dogu_1{operating_machine="Assembler1";duration=8;}
+  Schedule schedule_dogu_1{w_name="Dogu"; planning=[o_dogu_1];}
+  Worker dogu{name="Dogu"; schedule=schedule_dogu_1;}
+
+  Operate o_bo_1{operating_machine="Inspector1";duration=4;}
+  Movement m_bo_1{moving_to_machine="Inspector2";}
+  Operate o_bo_2{operating_machine="Inspector2";duration=4;}
+  Schedule schedule_bo_1{w_name="Bo"; planning=[o_bo_1, m_bo_1, o_bo_2];}
+  Worker bo{name="Bo"; schedule=schedule_bo_1;}
+
+  Operate o_tom_1{operating_machine="Fixer1";duration=4;}
+  Movement m_tom_1{moving_to_machine="Fixer2";}
+  Operate o_tom_2{operating_machine="Fixer2";duration=4;}
+  Movement m_tom_2{moving_to_machine="Loadingbay1";}
+  Operate o_tom_3{operating_machine="Loadingbay1";duration=8;}
+  Schedule schedule_tom_1{w_name="Tom"; planning=[o_tom_1, m_tom_1, o_tom_2, m_tom_2, o_tom_3];}
+  Worker tom{name="Tom"; schedule=schedule_tom_1;}
+
+  Operate o_ali_1{operating_machine="Incinerator1";duration=4;}
+  Movement m_ali_1{moving_to_machine="Incinerator2";}
+  Operate o_ali_2{operating_machine="Incinerator2";duration=4;}
+  Schedule schedule_ali_1{w_name="Ali"; planning=[o_ali_1, m_ali_1, o_ali_2];}
+  Worker ali{name="Ali"; schedule=schedule_ali_1;}
+
+  ArrivalCube arrival_cube{name="Arrivalcube1"; seg_out=Assembler1;}
+  ArrivalSphere arrival_sphere{name="Arrivalsphere1"; seg_out=Assembler1;}
+  Assembly assembler1{name="Assembler1"; in_cube=arrival_cube; in_sphere=arrival_sphere; out=join1;}
+
+  Split split1{name="Split1"; seg_in=assembler1; seg_out1=join1; seg_out2=join2;}
+
+  Join join1{in_left=split1; in_right=fixer1; out=inspector1;}
+  Join join2{in_left=split1; in_right=fixer2; out=inspector1;}
+  Join join3{in_left=inspector1; in_right=inspector2; out=loading_bay1;}
+
+  Inspection inspector1{name="Inspector1"; in=join1; out_fix=fixer1; out_destroy=incinerator1; out_accept=join3;}
+  Inspection inspector2{name="Inspector2"; in=join2; out_fix=fixer2; out_destroy=incinerator2; out_accept=join3;}
+
+  Fixer fixer1{name="Fixer1"; in_belt=inspector1; out_belt=join1;}
+  Fixer fixer2{name="Fixer2"; in_belt=inspector2; out_belt=join2;}
+
+  Incinerator incinerator1{name="Incinerator1"; in_belt=inspector1;}
+  Incinerator incinerator2{name="Incinerator2"; in_belt=inspector2;}
+
+  LoadingBay loading_bay1{name="Loadingbay1"; in_belt=join3;}
 }

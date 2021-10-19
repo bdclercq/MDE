@@ -1,8 +1,201 @@
-operation main(){
 
+operation Machine process() {}
+
+// Send Functions
+operation Belt send() {
+  if (self.seg_in.isDefined() and self.seg_out.isDefined()) {
+    if (self.seg_in.items.isDefined()){
+      self.items.add(self.seg_in.items);
+      self.seg_in.items = null;
+      if (self.seg_out.get(self.items)) {
+        (self + ' passing ' + self.items + ' to ' + self.seg_out).println();
+        self.items = null;
+      }
+      else {
+        (self + ' not passsing ' + self.items + ' to ' + self.seg_out).println();
+      }
+    }
+  }
 }
 
-operation produceCube(){
-  var c : cube;
+operation Join send() {
+  if (self.out.isDefined()) {
+    if (self.in_left.isDefined() and self.items.size() < 2) {
+      self.items.add(self.in_left.items);
+      self.in_left.items = null;
+    }
+    if (self.in_right.isDefined() and self.items.size() < 2) {
+      self.items.add(self.in_right.items);
+      self.in_right.items = null;
+    }
+    if (self.items.size() > 0 and self.out.get(self.items.first())) {
+      (self + ' passing ' + self.item + ' to ' + self.out).println();
+      self.items.remove(self.items.first());
+    }
+    else {
+      (self + ' cant pass ' + self.item + ' to ' + self.out).println();
+    }
+  }
+}
 
+operation Split send() {
+  if (self.seg_in.isDefined() and self.seg_out_1.isDefined() and self.seg_out_2.isDefined()) {
+    if (self.seg_in.items.isDefined()) {
+      if (self.alternator){
+        if (self.seg_out_1.get(self.seg_in.items)) {
+          (self + ' passing ' + self.seg_in.items + ' to ' + self.seg_out_1).println();
+          self.seg_in.items = null;
+          self.alternator = false;
+        }
+      } else {
+        if (self.seg_out_2.get(self.seg_in.items)) {
+          (self + ' passing ' + self.seg_in.items + ' to ' + self.seg_out_2).println();
+          self.seg_in.items = null;
+          self.alternator = true;
+        }
+      }
+    }
+  }
+}
+
+operation Inspection send() {
+  if (self.item.isDefined()) {
+    var passed : Boolean := false;
+    if (self.inspectResult = 0 and self.output_accept.isDefined()) {
+      (self + ' inspecting ' + self.item + ', is accepted, passing to ' + self.output_accept).println();
+      passed = self.output_accept.recieve(self.item);
+    }
+    else if (self.inspectResult = 1 and self.output_fix.isDefined()) {
+    (self + ' inspecting ' + self.item + ', needs fixing, passing to ' + self.output_fix).println();
+      passed = self.output_fix.recieve(self.item);
+    }
+    else if (self.inspectResult = 2 and self.output_destroy.isDefined()) {
+    (self + ' inspecting ' + self.item + ', should be destroyed, passing to ' + self.output_destroy).println();
+      passed = self.output_destroy.recieve(self.item);
+    }
+    else {
+    (self + ' cant pass, item not inspected yet').println();
+    }
+    if (passed) {
+      self.item = null;
+    }
+  }
+}
+// Get Functions
+operation Belt get(item) {
+  if (self.items.isUndefined() and item.isDefined()) {
+    self.items = item;
+    return true;
+  }else {
+    return false;
+  }
+}
+
+operation Join get(item) {
+  if (self.items.size() < 2 and item.isDefined()) {
+    (self + ' recieving item:' + item).println();
+    self.items.add(item);
+    return true;
+  } else {
+    return false;
+  }
+}
+
+
+operation Assembler get(item) {
+  var sphereReady := false;
+  var cubeReady := false;
+  if (item.isTypeOf(Sphere) and self.items.size() < 2) {
+  //(self + ' recieving sphere: ' + item).println();
+    self.items.add(item);
+    sphereReady = true;
+  }
+  else if (item.isTypeOf(Cube) and self.items.size() < 2) {
+  //(self + ' recieving cube: ' + item).println();
+    self.items.add(item);
+    cubeReady = true;
+  }
+  if (cubeReady and sphereReady) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
+
+// PROCESS FUNCTIONS
+operation ArrivalSphere process() {
+  if (self.items.isUndefined()){
+    self.items.add(new Sphere());
+    (self + ' created ' + self.item).println();
+  }
+}
+
+operation ArrivalCube process() {
+  if (self.items.isUndefined()){
+    self.items = new Cube();
+    (self + ' created ' + self.items).println();
+  }
+}
+
+operation Inspection process() {
+  var numbers : Sequence = Sequence {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
+  var number: Integer = numbers.random();
+  if (self.in_item.isDefined()){
+    if (number < 7) {
+      self.resultEnum = 'ACCEPT';
+    }
+    else if (number >= 7 and number < 9) {
+      self.resultEnum = 'FIX';
+    }
+    else if (number = 9) {
+      self.resultEnum = 'DESTROY';
+    }
+  }
+}
+
+operation Incinerator process() {
+  if (self.item.isDefined()){
+    (self + ' destroying ' + self.item).println();
+
+    self.item = null;
+  }
+}
+
+operation LoadingBay process() {
+  if (self.in_belt.items.isDefined()){
+    self.item_storage.add(self.in_belt.items);
+    (self + ' storing ' + self.in_belt.items + '. Total ' + self.stored_items.size() + ' items stored').println();
+    self.in_belt.items = null;
+  }
+}
+
+operation Assembly process() {
+  if (self.in_cube.items.isDefined() and self.in_sphere.items.isDefined()){
+    self.items = new AssembledItem();
+    (self + ' Assembling Cube: ' + self.in_cube.items + ' and sphere: ' + self.in_sphere.items + ' to : ' + self.item).println();
+    self.in_cube.items = null;
+    self.in_sphere.items = null;
+  }
+}
+
+
+
+operation main() {
+  var step : Integer := 0;
+
+  while (step < 10)
+  {
+      ('===== Step: ' + step + ' =====').println();
+
+      for (m: Machine in Machine.all()) {
+        m.process();
+      }
+
+      for (s: Segment in Segment.all()) {
+        s.pass();
+      }
+
+      step := step + 1;
+  }
 }
