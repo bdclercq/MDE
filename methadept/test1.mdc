@@ -1,0 +1,6 @@
+delete "PS1"
+delete "PS2"
+delete "Productionsystem"
+load "ass1"
+verify
+load EOL "ass1exec"
