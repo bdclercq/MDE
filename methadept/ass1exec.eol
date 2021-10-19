@@ -97,7 +97,6 @@ operation ArrivalSphere send() {
 }
 
 operation Inspection send() {
-  (self).println();
   if (self.in_item.isDefined()) {
     var passed := false;
     if (self.result = 'ACCEPT' and self.out_accept.isDefined()) {
@@ -229,7 +228,7 @@ operation Assembly process() {
 operation main() {
   var step := 0;
 
-  while (step < 100)
+  while (step < 20)
   {
       ('===== Step: ' + step + ' =====').println();
 
