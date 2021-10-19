@@ -1,0 +1,9 @@
+:: Constraints evaluated, (7) violations
+the value 0 is an invalid cardinality value for seg_out_2 in split1
+the value 0 is an invalid cardinality value for result in inspector1
+the value 0 is an invalid cardinality value for result in inspector2
+Constraint checkNames violated in FaultyPS
+the value 0 is an invalid cardinality value for result in inspector1
+the value 0 is an invalid cardinality value for result in inspector2
+the value 0 is an invalid cardinality value for result in inspector1
+:: Running commands in ./test1.mdc

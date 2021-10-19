@@ -1,0 +1,226 @@
+===== Step: 1 =====
+loading_bay1 storing Sequence {}. Total 2 items stored
+assembler1 Assembling Cube: MD_85b647ae9e0f4b208ed1d5412adddde9 and sphere: MD_60c2bb7ac433461b814c823771870aa8 to : MD_fa58f58c969943d19a741082efd7aac9
+arrival_sphere created MD_3036d7d1356946c98311a58478e61ee8
+join3 cant pass Sequence {} to loading_bay1
+join2 cant pass Sequence {} to inspector1
+join1 recieving item:MD_fa58f58c969943d19a741082efd7aac9
+split1 passing MD_fa58f58c969943d19a741082efd7aac9 to join1
+join1 passing Sequence {MD_fa58f58c969943d19a741082efd7aac9} to inspector1
+inspector1 cant pass, item not inspected yet
+===== Step: 2 =====
+arrival_cube created MD_7b03a9f186654218913578f1b167b383
+loading_bay1 storing Sequence {}. Total 3 items stored
+assembler1 Assembling Cube: MD_7b03a9f186654218913578f1b167b383 and sphere: MD_3036d7d1356946c98311a58478e61ee8 to : MD_41eb1bd503e144d6a88582c153874c75
+arrival_sphere created MD_db24285835334406a488be21309dc112
+join3 cant pass Sequence {} to loading_bay1
+join2 cant pass Sequence {} to inspector1
+join2 recieving item:MD_41eb1bd503e144d6a88582c153874c75
+split1 passing MD_41eb1bd503e144d6a88582c153874c75 to join2
+join1 cant pass Sequence {} to inspector1
+inspector1 inspecting. MD_fa58f58c969943d19a741082efd7aac9, is accepted, passing to join3
+join3 recieving item:MD_fa58f58c969943d19a741082efd7aac9
+===== Step: 3 =====
+arrival_cube created MD_fb8b9089f7004dc2ad443362c897bd3d
+loading_bay1 storing Sequence {MD_fa58f58c969943d19a741082efd7aac9}. Total 4 items stored
+assembler1 Assembling Cube: MD_fb8b9089f7004dc2ad443362c897bd3d and sphere: MD_db24285835334406a488be21309dc112 to : MD_f92ab686e6f54431a094e355c4179a9d
+arrival_sphere created MD_c0f810a5690b40849bb6099bda4ce051
+join3 cant pass Sequence {} to loading_bay1
+join2 passing Sequence {MD_41eb1bd503e144d6a88582c153874c75} to inspector1
+join1 recieving item:MD_f92ab686e6f54431a094e355c4179a9d
+split1 passing MD_f92ab686e6f54431a094e355c4179a9d to join1
+join1 cant pass Sequence {MD_f92ab686e6f54431a094e355c4179a9d} to inspector1
+inspector1 inspecting. MD_41eb1bd503e144d6a88582c153874c75, is accepted, passing to join3
+join3 recieving item:MD_41eb1bd503e144d6a88582c153874c75
+===== Step: 4 =====
+arrival_cube created MD_0f66849d4cba47cfabb5e5a67b9d0394
+loading_bay1 storing Sequence {MD_41eb1bd503e144d6a88582c153874c75}. Total 5 items stored
+assembler1 Assembling Cube: MD_0f66849d4cba47cfabb5e5a67b9d0394 and sphere: MD_c0f810a5690b40849bb6099bda4ce051 to : MD_c6023dfc3aff4228bf181a8ed2c75eac
+arrival_sphere created MD_be16f28ac98249b7a572461721e17e75
+join3 cant pass Sequence {} to loading_bay1
+join2 cant pass Sequence {} to inspector1
+join2 recieving item:MD_c6023dfc3aff4228bf181a8ed2c75eac
+split1 passing MD_c6023dfc3aff4228bf181a8ed2c75eac to join2
+join1 passing Sequence {MD_f92ab686e6f54431a094e355c4179a9d} to inspector1
+inspector1 inspecting. MD_f92ab686e6f54431a094e355c4179a9d, is accepted, passing to join3
+join3 recieving item:MD_f92ab686e6f54431a094e355c4179a9d
+===== Step: 5 =====
+arrival_cube created MD_570fce39e4c14ca6a0a408230d5d5052
+loading_bay1 storing Sequence {MD_f92ab686e6f54431a094e355c4179a9d}. Total 6 items stored
+assembler1 Assembling Cube: MD_570fce39e4c14ca6a0a408230d5d5052 and sphere: MD_be16f28ac98249b7a572461721e17e75 to : MD_a8830af6540645e592cff260d369b689
+arrival_sphere created MD_ba792a89574541e7b3a24993a1da05c2
+join3 cant pass Sequence {} to loading_bay1
+join2 passing Sequence {MD_c6023dfc3aff4228bf181a8ed2c75eac} to inspector1
+join1 recieving item:MD_a8830af6540645e592cff260d369b689
+split1 passing MD_a8830af6540645e592cff260d369b689 to join1
+join1 cant pass Sequence {MD_a8830af6540645e592cff260d369b689} to inspector1
+inspector1 inspecting. MD_c6023dfc3aff4228bf181a8ed2c75eac, is accepted, passing to join3
+join3 recieving item:MD_c6023dfc3aff4228bf181a8ed2c75eac
+===== Step: 6 =====
+arrival_cube created MD_930d8d10c2d24a7ba64fc95a5a5ab23b
+loading_bay1 storing Sequence {MD_c6023dfc3aff4228bf181a8ed2c75eac}. Total 7 items stored
+assembler1 Assembling Cube: MD_930d8d10c2d24a7ba64fc95a5a5ab23b and sphere: MD_ba792a89574541e7b3a24993a1da05c2 to : MD_4d3a21143389454b9d4b67f728ec52c5
+arrival_sphere created MD_069979b7b5174624a0c057782f405db5
+join3 cant pass Sequence {} to loading_bay1
+join2 cant pass Sequence {} to inspector1
+join2 recieving item:MD_4d3a21143389454b9d4b67f728ec52c5
+split1 passing MD_4d3a21143389454b9d4b67f728ec52c5 to join2
+join1 passing Sequence {MD_a8830af6540645e592cff260d369b689} to inspector1
+inspector1 inspecting. MD_a8830af6540645e592cff260d369b689, is accepted, passing to join3
+join3 recieving item:MD_a8830af6540645e592cff260d369b689
+===== Step: 7 =====
+arrival_cube created MD_81541189d28a41ec81cf7cc8694d175b
+loading_bay1 storing Sequence {MD_a8830af6540645e592cff260d369b689}. Total 8 items stored
+assembler1 Assembling Cube: MD_81541189d28a41ec81cf7cc8694d175b and sphere: MD_069979b7b5174624a0c057782f405db5 to : MD_4c50263f4efa4f17a09ba917946b1ee7
+arrival_sphere created MD_2419d3309ba849f1bf53efc668dfe1b7
+join3 cant pass Sequence {} to loading_bay1
+join2 passing Sequence {MD_4d3a21143389454b9d4b67f728ec52c5} to inspector1
+join1 recieving item:MD_4c50263f4efa4f17a09ba917946b1ee7
+split1 passing MD_4c50263f4efa4f17a09ba917946b1ee7 to join1
+join1 cant pass Sequence {MD_4c50263f4efa4f17a09ba917946b1ee7} to inspector1
+inspector1 inspecting. MD_4d3a21143389454b9d4b67f728ec52c5, is accepted, passing to join3
+join3 recieving item:MD_4d3a21143389454b9d4b67f728ec52c5
+===== Step: 8 =====
+arrival_cube created MD_2b1641265ec947c8909579318117f672
+loading_bay1 storing Sequence {MD_4d3a21143389454b9d4b67f728ec52c5}. Total 9 items stored
+assembler1 Assembling Cube: MD_2b1641265ec947c8909579318117f672 and sphere: MD_2419d3309ba849f1bf53efc668dfe1b7 to : MD_161f89098e904063b5727159be75ad9e
+arrival_sphere created MD_2c3c46b280324e9bbb01b34849888775
+join3 cant pass Sequence {} to loading_bay1
+join2 cant pass Sequence {} to inspector1
+join2 recieving item:MD_161f89098e904063b5727159be75ad9e
+split1 passing MD_161f89098e904063b5727159be75ad9e to join2
+join1 passing Sequence {MD_4c50263f4efa4f17a09ba917946b1ee7} to inspector1
+inspector1 inspecting. MD_4c50263f4efa4f17a09ba917946b1ee7, is accepted, passing to join3
+join3 recieving item:MD_4c50263f4efa4f17a09ba917946b1ee7
+===== Step: 9 =====
+arrival_cube created MD_6ae528e622e64005b2a811c65ce879fc
+loading_bay1 storing Sequence {MD_4c50263f4efa4f17a09ba917946b1ee7}. Total 10 items stored
+assembler1 Assembling Cube: MD_6ae528e622e64005b2a811c65ce879fc and sphere: MD_2c3c46b280324e9bbb01b34849888775 to : MD_3abaea99d2b34674abbccfdbf0d7521e
+arrival_sphere created MD_073357ebccc142c5bca2ae36b8b03649
+join3 cant pass Sequence {} to loading_bay1
+join2 passing Sequence {MD_161f89098e904063b5727159be75ad9e} to inspector1
+join1 recieving item:MD_3abaea99d2b34674abbccfdbf0d7521e
+split1 passing MD_3abaea99d2b34674abbccfdbf0d7521e to join1
+join1 cant pass Sequence {MD_3abaea99d2b34674abbccfdbf0d7521e} to inspector1
+inspector1 inspecting. MD_161f89098e904063b5727159be75ad9e, is accepted, passing to join3
+join3 recieving item:MD_161f89098e904063b5727159be75ad9e
+===== Step: 10 =====
+arrival_cube created MD_198d5fc50c5647db80146ca7f513f6c5
+loading_bay1 storing Sequence {MD_161f89098e904063b5727159be75ad9e}. Total 11 items stored
+assembler1 Assembling Cube: MD_198d5fc50c5647db80146ca7f513f6c5 and sphere: MD_073357ebccc142c5bca2ae36b8b03649 to : MD_ae1f8da3b05d4a8e8f1f41ba99d9f298
+arrival_sphere created MD_f2b09484ec094f88a08bf58e04bf080c
+join3 cant pass Sequence {} to loading_bay1
+join2 cant pass Sequence {} to inspector1
+join2 recieving item:MD_ae1f8da3b05d4a8e8f1f41ba99d9f298
+split1 passing MD_ae1f8da3b05d4a8e8f1f41ba99d9f298 to join2
+join1 passing Sequence {MD_3abaea99d2b34674abbccfdbf0d7521e} to inspector1
+inspector1 inspecting. MD_3abaea99d2b34674abbccfdbf0d7521e, is accepted, passing to join3
+join3 recieving item:MD_3abaea99d2b34674abbccfdbf0d7521e
+===== Step: 11 =====
+arrival_cube created MD_09cc0e4421a04a9f88aafb51f6c9fecb
+loading_bay1 storing Sequence {MD_3abaea99d2b34674abbccfdbf0d7521e}. Total 12 items stored
+assembler1 Assembling Cube: MD_09cc0e4421a04a9f88aafb51f6c9fecb and sphere: MD_f2b09484ec094f88a08bf58e04bf080c to : MD_24f0aca983034fb9ac32352b259a19f0
+arrival_sphere created MD_37c3161c87ce403fb7efe08ad1881f35
+join3 cant pass Sequence {} to loading_bay1
+join2 passing Sequence {MD_ae1f8da3b05d4a8e8f1f41ba99d9f298} to inspector1
+join1 recieving item:MD_24f0aca983034fb9ac32352b259a19f0
+split1 passing MD_24f0aca983034fb9ac32352b259a19f0 to join1
+join1 cant pass Sequence {MD_24f0aca983034fb9ac32352b259a19f0} to inspector1
+inspector1 inspecting. MD_ae1f8da3b05d4a8e8f1f41ba99d9f298, is accepted, passing to join3
+join3 recieving item:MD_ae1f8da3b05d4a8e8f1f41ba99d9f298
+===== Step: 12 =====
+arrival_cube created MD_9385200baf844565b56d3951a92434c7
+loading_bay1 storing Sequence {MD_ae1f8da3b05d4a8e8f1f41ba99d9f298}. Total 13 items stored
+assembler1 Assembling Cube: MD_9385200baf844565b56d3951a92434c7 and sphere: MD_37c3161c87ce403fb7efe08ad1881f35 to : MD_bfc7cf63fa70427f96a3d55a5f0c36e7
+arrival_sphere created MD_325fe09bd0bd41dbbd346274fc66d55f
+join3 cant pass Sequence {} to loading_bay1
+join2 cant pass Sequence {} to inspector1
+join2 recieving item:MD_bfc7cf63fa70427f96a3d55a5f0c36e7
+split1 passing MD_bfc7cf63fa70427f96a3d55a5f0c36e7 to join2
+join1 passing Sequence {MD_24f0aca983034fb9ac32352b259a19f0} to inspector1
+inspector1 inspecting. MD_24f0aca983034fb9ac32352b259a19f0, is accepted, passing to join3
+join3 recieving item:MD_24f0aca983034fb9ac32352b259a19f0
+===== Step: 13 =====
+arrival_cube created MD_bf6a9ef214f04ac89d03f0998378c66a
+loading_bay1 storing Sequence {MD_24f0aca983034fb9ac32352b259a19f0}. Total 14 items stored
+assembler1 Assembling Cube: MD_bf6a9ef214f04ac89d03f0998378c66a and sphere: MD_325fe09bd0bd41dbbd346274fc66d55f to : MD_3831c43e6bda457697e3eb9f2d5496d0
+arrival_sphere created MD_ef01d3f55844482ea1fadc423e21a4f1
+join3 cant pass Sequence {} to loading_bay1
+join2 passing Sequence {MD_bfc7cf63fa70427f96a3d55a5f0c36e7} to inspector1
+join1 recieving item:MD_3831c43e6bda457697e3eb9f2d5496d0
+split1 passing MD_3831c43e6bda457697e3eb9f2d5496d0 to join1
+join1 cant pass Sequence {MD_3831c43e6bda457697e3eb9f2d5496d0} to inspector1
+inspector1 inspecting. MD_bfc7cf63fa70427f96a3d55a5f0c36e7, is accepted, passing to join3
+join3 recieving item:MD_bfc7cf63fa70427f96a3d55a5f0c36e7
+===== Step: 14 =====
+arrival_cube created MD_eec636b1c1a74c96be6addaa23647490
+loading_bay1 storing Sequence {MD_bfc7cf63fa70427f96a3d55a5f0c36e7}. Total 15 items stored
+assembler1 Assembling Cube: MD_eec636b1c1a74c96be6addaa23647490 and sphere: MD_ef01d3f55844482ea1fadc423e21a4f1 to : MD_b734820b40ea48c99e1043c04d37901f
+arrival_sphere created MD_5d82dcf386ce4c6a80cdfd85ec04fbc5
+join3 cant pass Sequence {} to loading_bay1
+join2 cant pass Sequence {} to inspector1
+join2 recieving item:MD_b734820b40ea48c99e1043c04d37901f
+split1 passing MD_b734820b40ea48c99e1043c04d37901f to join2
+join1 passing Sequence {MD_3831c43e6bda457697e3eb9f2d5496d0} to inspector1
+inspector1 inspecting. MD_3831c43e6bda457697e3eb9f2d5496d0, is accepted, passing to join3
+join3 recieving item:MD_3831c43e6bda457697e3eb9f2d5496d0
+===== Step: 15 =====
+arrival_cube created MD_1bbb1c639be94d64b4c94dd522bec699
+loading_bay1 storing Sequence {MD_3831c43e6bda457697e3eb9f2d5496d0}. Total 16 items stored
+assembler1 Assembling Cube: MD_1bbb1c639be94d64b4c94dd522bec699 and sphere: MD_5d82dcf386ce4c6a80cdfd85ec04fbc5 to : MD_67b2a36ad9c142e1a94228f955006524
+arrival_sphere created MD_46ccdf40fa2540c2ac520409f692f3b1
+join3 cant pass Sequence {} to loading_bay1
+join2 passing Sequence {MD_b734820b40ea48c99e1043c04d37901f} to inspector1
+join1 recieving item:MD_67b2a36ad9c142e1a94228f955006524
+split1 passing MD_67b2a36ad9c142e1a94228f955006524 to join1
+join1 cant pass Sequence {MD_67b2a36ad9c142e1a94228f955006524} to inspector1
+inspector1 inspecting. MD_b734820b40ea48c99e1043c04d37901f, is accepted, passing to join3
+join3 recieving item:MD_b734820b40ea48c99e1043c04d37901f
+===== Step: 16 =====
+arrival_cube created MD_87f41eb7dc03464b983d52821f86f69c
+loading_bay1 storing Sequence {MD_b734820b40ea48c99e1043c04d37901f}. Total 17 items stored
+assembler1 Assembling Cube: MD_87f41eb7dc03464b983d52821f86f69c and sphere: MD_46ccdf40fa2540c2ac520409f692f3b1 to : MD_51bb1f636cc64659b7380e47b5e2c48d
+arrival_sphere created MD_cf2982897d40409982a22f54ee803e4c
+join3 cant pass Sequence {} to loading_bay1
+join2 cant pass Sequence {} to inspector1
+join2 recieving item:MD_51bb1f636cc64659b7380e47b5e2c48d
+split1 passing MD_51bb1f636cc64659b7380e47b5e2c48d to join2
+join1 passing Sequence {MD_67b2a36ad9c142e1a94228f955006524} to inspector1
+inspector1 inspecting. MD_67b2a36ad9c142e1a94228f955006524, is accepted, passing to join3
+join3 recieving item:MD_67b2a36ad9c142e1a94228f955006524
+===== Step: 17 =====
+arrival_cube created MD_dcdf7e900fc14fbb856ead8629bf144b
+loading_bay1 storing Sequence {MD_67b2a36ad9c142e1a94228f955006524}. Total 18 items stored
+assembler1 Assembling Cube: MD_dcdf7e900fc14fbb856ead8629bf144b and sphere: MD_cf2982897d40409982a22f54ee803e4c to : MD_f8ec9bdb2cc644f3aebe5a329a1f2e13
+arrival_sphere created MD_6989ff590782488fad4d0db41df8569c
+join3 cant pass Sequence {} to loading_bay1
+join2 passing Sequence {MD_51bb1f636cc64659b7380e47b5e2c48d} to inspector1
+join1 recieving item:MD_f8ec9bdb2cc644f3aebe5a329a1f2e13
+split1 passing MD_f8ec9bdb2cc644f3aebe5a329a1f2e13 to join1
+join1 cant pass Sequence {MD_f8ec9bdb2cc644f3aebe5a329a1f2e13} to inspector1
+inspector1 inspecting. MD_51bb1f636cc64659b7380e47b5e2c48d, is accepted, passing to join3
+join3 recieving item:MD_51bb1f636cc64659b7380e47b5e2c48d
+===== Step: 18 =====
+arrival_cube created MD_d6d91abc0c754f0b882dbed72474d204
+loading_bay1 storing Sequence {MD_51bb1f636cc64659b7380e47b5e2c48d}. Total 19 items stored
+assembler1 Assembling Cube: MD_d6d91abc0c754f0b882dbed72474d204 and sphere: MD_6989ff590782488fad4d0db41df8569c to : MD_3a52800aa73746e6b649ec7557abe3c3
+arrival_sphere created MD_1ef0f600546447e990aadb2b178f383f
+join3 cant pass Sequence {} to loading_bay1
+join2 cant pass Sequence {} to inspector1
+join2 recieving item:MD_3a52800aa73746e6b649ec7557abe3c3
+split1 passing MD_3a52800aa73746e6b649ec7557abe3c3 to join2
+join1 passing Sequence {MD_f8ec9bdb2cc644f3aebe5a329a1f2e13} to inspector1
+inspector1 inspecting. MD_f8ec9bdb2cc644f3aebe5a329a1f2e13, is accepted, passing to join3
+join3 recieving item:MD_f8ec9bdb2cc644f3aebe5a329a1f2e13
+===== Step: 19 =====
+arrival_cube created MD_ad8934ed5a0647e3b69453be0f9ff387
+loading_bay1 storing Sequence {MD_f8ec9bdb2cc644f3aebe5a329a1f2e13}. Total 20 items stored
+assembler1 Assembling Cube: MD_ad8934ed5a0647e3b69453be0f9ff387 and sphere: MD_1ef0f600546447e990aadb2b178f383f to : MD_024587a19d414915a6b64f46cc39ac93
+arrival_sphere created MD_6424ea006ca041a69700f72e60bc9a8b
+join3 cant pass Sequence {} to loading_bay1
+join2 passing Sequence {MD_3a52800aa73746e6b649ec7557abe3c3} to inspector1
+join1 recieving item:MD_024587a19d414915a6b64f46cc39ac93
+split1 passing MD_024587a19d414915a6b64f46cc39ac93 to join1
+join1 cant pass Sequence {MD_024587a19d414915a6b64f46cc39ac93} to inspector1
+inspector1 inspecting. MD_3a52800aa73746e6b649ec7557abe3c3, is accepted, passing to join3
+join3 recieving item:MD_3a52800aa73746e6b649ec7557abe3c3

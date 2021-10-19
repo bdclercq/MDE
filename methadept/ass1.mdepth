@@ -62,21 +62,21 @@ Model Productionsystem imports ScheduleModel{
   }
 
   Node Straight: Belt{
-    seg_in: Belt[0..1];
-    seg_out: Belt[0..1];
+    seg_in: Belt[1];
+    seg_out: Belt[1];
   }
 
   Node Split: Belt{
-    seg_in: Belt[0..1];
-    seg_out_1: Belt[0..1];
-    seg_out_2: Belt[0..1];
+    seg_in: Belt[1];
+    seg_out_1: Belt[1];
+    seg_out_2: Belt[1];
     alternator: boolean = true;
   }
 
   Node Join: Belt{ //items must be outputted in order of arrival
-    in_left: Belt[0..1];
-    in_right: Belt[0..1];
-    out: Belt[0..1];
+    in_left: Belt[1];
+    in_right: Belt[1];
+    out: Belt[1];
     items: Item[0..*] {ordered};
   }
 
@@ -88,42 +88,42 @@ Model Productionsystem imports ScheduleModel{
   }
 
   Node ArrivalCube: Machine{
-    seg_out: Belt[0..1];
+    seg_out: Belt[1];
     items: Cube[0..1];
   }
 
   Node ArrivalSphere: Machine{
-    seg_out: Belt[0..1];
+    seg_out: Belt[1];
     items: Sphere[0..1];
   }
 
   Node Assembly: Machine{
-    in_cube: Belt[0..1]; // don't start if not connected to cubes
-    in_sphere: Belt[0..1]; // don't start if not connected to spheres
+    in_cube: Belt[1]; // don't start if not connected to cubes
+    in_sphere: Belt[1]; // don't start if not connected to spheres
     items: AssembledItem[0..1];  //out
-    out: Belt[0..1];
+    out: Belt[1];
   }
 
   Node Inspection: Machine{
-    seg_in: Belt[0..1];
+    seg_in: Belt[1];
     in_item: Item[0..1];
-    out_fix: Belt[0..1];
-    out_destroy: Belt[0..1];
-    out_accept: Belt[0..1];
+    out_fix: Belt[1];
+    out_destroy: Belt[1];
+    out_accept: Belt[1];
     result: resultEnum;
   }
 
   Node LoadingBay: Machine{
-    seg_in: Belt[0..1];
+    seg_in: Belt[1];
     item_storage: Item[0..*];
   }
 
   Node Fixer: Machine{
-    seg_in: Belt[0..1];
-    seg_out: Belt[0..1];
+    seg_in: Belt[1];
+    seg_out: Belt[1];
   }
   Node Incinerator: Machine{
-    in_belt: Belt[0..1];
+    in_belt: Belt[1];
   }
 
   checkNames: $Machine.allInstances().forAll(x|x.name.matches("[A-Z][a-z]*[0-9]*"))$
@@ -208,6 +208,33 @@ Productionsystem PS2{
   Assembly assembler1{name="Assembler1"; in_cube=arrival_cube; in_sphere=arrival_sphere; out=join1;}
 
   Split split1{seg_in=assembler1; seg_out_1=join1; seg_out_2=join2;}
+
+  Join join1{in_left=split1; in_right=fixer1; out=inspector1;}
+  Join join2{in_left=split1; in_right=fixer2; out=inspector1;}
+  Join join3{in_left=inspector1; in_right=inspector2; out=loading_bay1;}
+
+  Inspection inspector1{name="Inspector1"; seg_in=join1; out_fix=fixer1; out_destroy=incinerator1; out_accept=join3;}
+  Inspection inspector2{name="Inspector2"; seg_in=join2; out_fix=fixer2; out_destroy=incinerator2; out_accept=join3;}
+
+  Fixer fixer1{name="Fixer1"; seg_in=inspector1; seg_out=join1;}
+  Fixer fixer2{name="Fixer2"; seg_in=inspector2; seg_out=join2;}
+
+  Incinerator incinerator1{name="Incinerator1"; in_belt=inspector1;}
+  Incinerator incinerator2{name="Incinerator2"; in_belt=inspector2;}
+
+  LoadingBay loading_bay1{name="Loadingbay1"; seg_in=join3;}
+}
+
+Productionsystem FaultyPS{
+
+  // For Naming Constraint Checking.
+  ArrivalCube arrival_cube{name="arrivalcube1"; seg_out=assembler1;}
+  // For disabling Assembler to assemble AssembledItem since it is impossible from 2 Cube models.
+  ArrivalCube arrival_sphere{name="Arrivalsphere1"; seg_out=assembler1;}
+  Assembly assembler1{name="Assembler1"; in_cube=arrival_cube; in_sphere=arrival_sphere; out=join1;}
+
+  // Only One Output Belt.
+  Split split1{seg_in=assembler1; seg_out_1=join1;}
 
   Join join1{in_left=split1; in_right=fixer1; out=inspector1;}
   Join join2{in_left=split1; in_right=fixer2; out=inspector1;}

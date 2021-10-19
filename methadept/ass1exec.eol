@@ -2,6 +2,8 @@
 operation Machine process() {}
 
 // Send Functions
+
+// Basic Belt Segment Send Function. Basically checks for item availability to move forward.
 operation Belt send() {
   if (self.seg_in.isDefined() and self.seg_out.isDefined()) {
     //(self).println();
@@ -19,6 +21,7 @@ operation Belt send() {
   }
 }
 
+// Send function override for Join Model. It will only take 2 items at max and sends them in FiFo order.
 operation Join send() {
 
   if (self.out.isDefined()) {
@@ -44,6 +47,7 @@ operation Join send() {
   }
 }
 
+// Send function override for Split Model. It will alternate between 2 output belts with a basic boolean check.
 operation Split send() {
   if (self.seg_in.isDefined() and self.seg_out_1.isDefined() and self.seg_out_2.isDefined()) {
     if (self.seg_in.items.isDefined()) {
@@ -64,6 +68,7 @@ operation Split send() {
   }
 }
 
+// Send function override for Assembly Machine Model.
 operation Assembly send() {
   if (self.items.isDefined() and self.out.isDefined()){
     if (self.out.get(self.items)){
@@ -73,14 +78,15 @@ operation Assembly send() {
   }
 }
 
+// Send function override for LoadingBay Model. It shouldnt do anything.
 operation LoadingBay send() {
 
 }
-
+// Send function override for Incinerator Model. It shouldnt do anything.
 operation Incinerator send() {
 
 }
-
+// Send function override for ArrivalCube Model
 operation ArrivalCube send() {
   if (self.items.isDefined()){
     if (self.seg_out.get(self.items)) {
@@ -88,6 +94,7 @@ operation ArrivalCube send() {
     }
   }
 }
+// Send function override for ArrivalSphere Model
 operation ArrivalSphere send() {
   if (self.items.isDefined()){
     if (self.seg_out.get(self.items)) {
@@ -96,6 +103,7 @@ operation ArrivalSphere send() {
   }
 }
 
+// Send function override for Inspection Model. Sends the current item to equal ENUM in the result field in the model.
 operation Inspection send() {
   if (self.in_item.isDefined()) {
     var passed := false;
@@ -130,6 +138,7 @@ operation Belt get(item) {
   }
 }
 
+// Join Constraint Checking. Only takes items if it has less than 2 items present.
 operation Join get(item) {
   if (self.items.size() < 2 and item.isDefined()) {
     (self + ' recieving item:' + item).println();
@@ -140,6 +149,7 @@ operation Join get(item) {
   }
 }
 
+// Assembly Constraint Checking. Only returns true if and only if it has 1 cube and 1 sphere present.
 operation Assembly get(item) {
   var sphereReady := false;
   var cubeReady := false;
@@ -156,6 +166,7 @@ operation Assembly get(item) {
   }
 }
 
+// Inspection Constraint Checking. Only returns true if and only if it has an Item present.
 operation Inspection get(item) {
   if (self.in_item.isUndefined() and item.isDefined()) {
     self.in_item = item;
@@ -168,6 +179,8 @@ operation Inspection get(item) {
 
 
 // PROCESS FUNCTIONS
+
+// Creates a new Sphere item.
 operation ArrivalSphere process() {
   if (self.items.isUndefined()){
     self.items = new Sphere();
@@ -175,6 +188,7 @@ operation ArrivalSphere process() {
   }
 }
 
+// Creates a new Cube item.
 operation ArrivalCube process() {
   if (self.items.isUndefined()){
     self.items = new Cube();
@@ -182,6 +196,7 @@ operation ArrivalCube process() {
   }
 }
 
+// Sets result to enums by picking random numbers.
 operation Inspection process() {
   var numbers : Sequence = Sequence {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
   var number: Integer = numbers.random();
@@ -198,6 +213,7 @@ operation Inspection process() {
   }
 }
 
+// Destroys the item by setting it to null.
 operation Incinerator process() {
   if (self.items.isDefined()){
     (self + ' destroying ' + self.items).println();
@@ -206,6 +222,7 @@ operation Incinerator process() {
   }
 }
 
+// Stores many amount of items.
 operation LoadingBay process() {
   if (self.seg_in.items.isDefined()){
     self.item_storage.add(self.seg_in.items);
@@ -214,6 +231,7 @@ operation LoadingBay process() {
   }
 }
 
+// Creates a new AssembledItem. If one sphere and one cube item present and consumes them.
 operation Assembly process() {
   if (self.in_cube.items.isDefined() and self.in_sphere.items.isDefined()){
     self.items = new AssembledItem();
@@ -224,7 +242,7 @@ operation Assembly process() {
 }
 
 
-
+// Basic main function
 operation main() {
   var step := 0;
 
