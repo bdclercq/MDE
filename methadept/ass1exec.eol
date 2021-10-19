@@ -4,11 +4,12 @@ operation Machine process() {}
 // Send Functions
 operation Belt send() {
   if (self.seg_in.isDefined() and self.seg_out.isDefined()) {
+    //(self).println();
     if (self.seg_in.items.isDefined()){
-      self.items.addAll(self.seg_in.items);
+      self.items = self.seg_in.items;
       self.seg_in.items = null;
       if (self.seg_out.get(self.items)) {
-        (self + ' passing ' + self.items + ' to ' + self.seg_out).println();
+        (self + ' passing ' + self.items + ' to xx' + self.seg_out).println();
         self.items = null;
       }
       else {
@@ -19,21 +20,26 @@ operation Belt send() {
 }
 
 operation Join send() {
+
   if (self.out.isDefined()) {
-    if (self.in_left.isDefined() and self.items.size() < 2) {
-      self.items.addAll(self.in_left.items);
-      self.in_left.items = null;
+    if (self.in_left.isDefined() and self.items.isDefined() and self.items.size() < 2) {
+      if (self.in_left.items.isDefined()){
+        self.items.add(self.in_left.items);
+        self.in_left.items = null;
+      }
     }
-    if (self.in_right.isDefined() and self.items.size() < 2) {
-      self.items.addAll(self.in_right.items);
-      self.in_right.items = null;
+    if (self.in_right.isDefined() and self.items.isDefined() and self.items.size() < 2) {
+      if (self.in_right.items.isDefined()){
+        self.items.add(self.in_right.items);
+        self.in_right.items = null;
+      }
     }
     if (self.items.size() > 0 and self.out.get(self.items.first())) {
-      (self + ' passing ' + self.item + ' to ' + self.out).println();
+      (self + ' passing ' + self.items + ' to ' + self.out).println();
       self.items.remove(self.items.first());
     }
     else {
-      (self + ' cant pass ' + self.item + ' to ' + self.out).println();
+      (self + ' cant pass ' + self.items + ' to ' + self.out).println();
     }
   }
 }
@@ -58,26 +64,59 @@ operation Split send() {
   }
 }
 
+operation Assembly send() {
+  if (self.items.isDefined() and self.out.isDefined()){
+    if (self.out.get(self.items)){
+      (self + ' passing ' + self.items + ' to ' + self.out).println();
+      self.out.items = null;
+    }
+  }
+}
+
+operation LoadingBay send() {
+
+}
+
+operation Incinerator send() {
+
+}
+
+operation ArrivalCube send() {
+  if (self.items.isDefined()){
+    if (self.seg_out.get(self.items)) {
+      (self + ' passing ' + self.items + ' to ' + self.seg_out).println();
+    }
+  }
+}
+operation ArrivalSphere send() {
+  if (self.items.isDefined()){
+    if (self.seg_out.get(self.items)) {
+      (self + ' passing ' + self.items + ' to ' + self.seg_out).println();
+    }
+  }
+}
+
 operation Inspection send() {
-  if (self.item.isDefined()) {
-    var passed : Boolean := false;
-    if (self.inspectResult = 0 and self.output_accept.isDefined()) {
-      (self + ' inspecting ' + self.item + ', is accepted, passing to ' + self.output_accept).println();
-      passed = self.output_accept.recieve(self.item);
+  (self).println();
+  if (self.in_item.isDefined()) {
+    var passed := false;
+    if (self.result = 'ACCEPT' and self.out_accept.isDefined()) {
+      (self + ' inspecting. ' + self.in_item + ', is accepted, passing to ' + self.out_accept).println();
+      passed = self.out_accept.get(self.in_item);
     }
-    else if (self.inspectResult = 1 and self.output_fix.isDefined()) {
-    (self + ' inspecting ' + self.item + ', needs fixing, passing to ' + self.output_fix).println();
-      passed = self.output_fix.recieve(self.item);
+    else if (self.result = 'FIX' and self.out_fix.isDefined()) {
+    (self + ' inspecting. ' + self.in_item + ', needs fixing, passing to ' + self.out_fix).println();
+      passed = self.out_fix.get(self.in_item);
     }
-    else if (self.inspectResult = 2 and self.output_destroy.isDefined()) {
-    (self + ' inspecting ' + self.item + ', should be destroyed, passing to ' + self.output_destroy).println();
-      passed = self.output_destroy.recieve(self.item);
+    else if (self.result = 'DESTROY' and self.out_destroy.isDefined()) {
+    (self + ' inspecting. ' + self.in_item + ', should be destroyed, passing to ' + self.out_destroy).println();
+      passed = self.out_destroy.get(self.in_item);
     }
     else {
     (self + ' cant pass, item not inspected yet').println();
     }
     if (passed) {
-      self.item = null;
+      self.in_item = null;
     }
   }
 }
@@ -95,24 +134,20 @@ operation Belt get(item) {
 operation Join get(item) {
   if (self.items.size() < 2 and item.isDefined()) {
     (self + ' recieving item:' + item).println();
-    self.items.add(item);
+    self.items = item;
     return true;
   } else {
     return false;
   }
 }
 
-operation Assembler get(item) {
+operation Assembly get(item) {
   var sphereReady := false;
   var cubeReady := false;
   if (item.isTypeOf(Sphere) and self.items.size() < 2) {
-  //(self + ' recieving sphere: ' + item).println();
-    self.items.add(item);
     sphereReady = true;
   }
   else if (item.isTypeOf(Cube) and self.items.size() < 2) {
-  //(self + ' recieving cube: ' + item).println();
-    self.items.add(item);
     cubeReady = true;
   }
   if (cubeReady and sphereReady) {
@@ -121,6 +156,16 @@ operation Assembler get(item) {
     return false;
   }
 }
+
+operation Inspection get(item) {
+  if (self.in_item.isUndefined() and item.isDefined()) {
+    self.in_item = item;
+    return true;
+  }else {
+    return false;
+  }
+}
+
 
 
 // PROCESS FUNCTIONS
@@ -143,13 +188,13 @@ operation Inspection process() {
   var number: Integer = numbers.random();
   if (self.in_item.isDefined()){
     if (number < 7) {
-      self.resultEnum = 'ACCEPT';
+      self.result = 'ACCEPT';
     }
     else if (number >= 7 and number < 9) {
-      self.resultEnum = 'FIX';
+      self.result = 'FIX';
     }
     else if (number = 9) {
-      self.resultEnum = 'DESTROY';
+      self.result = 'DESTROY';
     }
   }
 }
@@ -163,116 +208,28 @@ operation Incinerator process() {
 }
 
 operation LoadingBay process() {
-  if (self.in_belt.items.isDefined()){
-    self.item_storage.addAll(self.in_belt.items);
-    (self + ' storing ' + self.in_belt.items + '. Total ' + self.stored_items.size() + ' items stored').println();
-    self.in_belt.items = null;
+  if (self.seg_in.items.isDefined()){
+    self.item_storage.add(self.seg_in.items);
+    (self + ' storing ' + self.seg_in.items + '. Total ' + self.item_storage.size() + ' items stored').println();
+    self.seg_in.items = null;
   }
 }
 
 operation Assembly process() {
   if (self.in_cube.items.isDefined() and self.in_sphere.items.isDefined()){
     self.items = new AssembledItem();
-    (self + ' Assembling Cube: ' + self.in_cube.items + ' and sphere: ' + self.in_sphere.items + ' to : ' + self.item).println();
+    (self + ' Assembling Cube: ' + self.in_cube.items + ' and sphere: ' + self.in_sphere.items + ' to : ' + self.items).println();
     self.in_cube.items = null;
     self.in_sphere.items = null;
   }
 }
 
 
-operation Straight moveItem(){
-  if (self.seg_in.isDefined() and self.seg_out.isDefined()){
-    self.seg_out.items = self.seg_in.items;
-    self.seg_in.items = null;
-  }
-}
-
-operation Split moveItem(){
-  if (self.seg_in.isDefined() and self.seg_out_1.isDefined() and self.seg_out_2.isDefined()){
-    if (self.alternator){
-      self.seg_out_1.items = self.seg_in.items;
-      self.alternator = false;
-    }
-    else{
-      self.seg_out_2.items = self.seg_in.items;
-      self.alternator = true;
-    }
-    self.seg_in.items = null;
-  }
-}
-
-operation Join moveItem(){
-  if (self.in_left.isDefined() and self.in_right.isDefined() and self.out.isDefined()){
-    self.items.addAll(self.in_left.items);
-    self.items.addAll(self.in_right.items);
-    self.in_left.items = null;
-    self.in_right.items = null;
-    self.out = self.items.removeAt(0);
-  }
-}
-
-  operation Assembly moveItem(){
-    if (self.in_cube.isDefined() and self.in_sphere.isDefined() and self.out.isDefined()){
-      self.out.items = self.items.removeAt(0);
-    }
-  }
-
-  operation Inspection moveItem(){
-    if (self.seg_in.isDefined() and self.out_fix.isDefined() and self.out_destroy.isDefined() and self.out_accept.isDefined()){
-      if (self.turn==0){
-        self.turn=1;
-        self.out_fix=self.in_item;
-      }
-      if (self.turn==1){
-        self.turn=2;
-        self.out_destroy=self.in_item;
-      }
-      if (self.turn==2){
-        self.turn=0;
-        self.out_accept=self.in_item;
-      }
-      self.in_item=null;
-    }
-  }
-
-  operation Fixer moveItem(){
-    if (self.in_belt.isDefined() and self.out_belt.isDefined()){
-      self.out_belt.items = self.in_belt.items;
-      self.in_belt.items = null;
-    }
-  }
-
-  operation LoadingBay moveItem(){
-    if (self.in_belt.isDefined() and self.item_storage.isDefined()){
-      self.item_storage.addAll(self.in_belt.items);
-      self.in_belt.items=null;
-    }
-  }
-
-  operation ArrivalCube moveItem(){
-    if (self.seg_out.isDefined() and self.items.isDefined()){
-      self.seg_out.items = self.items;
-    }
-  }
-
-  operation ArrivalSphere moveItem(){
-    if (self.seg_out.isDefined() and self.items.isDefined()){
-      self.seg_out.items = self.items;
-    }
-  }
-
-  operation Incinerator moveItem(){
-    if (self.in_belt.isDefined()){
-      self.in_belt.items=null;
-    }
-  }
-
-
 
 operation main() {
-  var step : Integer := 0;
+  var step := 0;
 
-  while (step < 10)
+  while (step < 100)
   {
       ('===== Step: ' + step + ' =====').println();
 
@@ -281,9 +238,9 @@ operation main() {
       }
 
       for (b: Belt in Belt.all()) {
-        b.moveItem();
+        b.send();
       }
 
-      step := step + 1;
+      step = step + 1;
   }
 }

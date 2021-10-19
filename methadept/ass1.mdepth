@@ -110,17 +110,17 @@ Model Productionsystem imports ScheduleModel{
     out_fix: Belt[0..1];
     out_destroy: Belt[0..1];
     out_accept: Belt[0..1];
-    turn: int=0;
+    result: resultEnum;
   }
 
   Node LoadingBay: Machine{
-    in_belt: Belt[0..1];
+    seg_in: Belt[0..1];
     item_storage: Item[0..*];
   }
 
   Node Fixer: Machine{
-    in_belt: Belt[0..1];
-    out_belt: Belt[0..1];
+    seg_in: Belt[0..1];
+    seg_out: Belt[0..1];
   }
   Node Incinerator: Machine{
     in_belt: Belt[0..1];
@@ -166,8 +166,8 @@ Productionsystem PS1{
   Straight s5{seg_in=fixer1; seg_out=join1;}
 
 
-  LoadingBay loading_bay1{name="Loadingbay1"; in_belt=s4;}
-  Fixer fixer1{name="Fixer1"; in_belt=s3; out_belt=s5;}
+  LoadingBay loading_bay1{name="Loadingbay1"; seg_in=s4;}
+  Fixer fixer1{name="Fixer1"; seg_in=s3; seg_out=s5;}
   Incinerator incinerator1{name="Incinerator1"; in_belt=inspector1;}
 }
 
@@ -216,11 +216,11 @@ Productionsystem PS2{
   Inspection inspector1{name="Inspector1"; seg_in=join1; out_fix=fixer1; out_destroy=incinerator1; out_accept=join3;}
   Inspection inspector2{name="Inspector2"; seg_in=join2; out_fix=fixer2; out_destroy=incinerator2; out_accept=join3;}
 
-  Fixer fixer1{name="Fixer1"; in_belt=inspector1; out_belt=join1;}
-  Fixer fixer2{name="Fixer2"; in_belt=inspector2; out_belt=join2;}
+  Fixer fixer1{name="Fixer1"; seg_in=inspector1; seg_out=join1;}
+  Fixer fixer2{name="Fixer2"; seg_in=inspector2; seg_out=join2;}
 
   Incinerator incinerator1{name="Incinerator1"; in_belt=inspector1;}
   Incinerator incinerator2{name="Incinerator2"; in_belt=inspector2;}
 
-  LoadingBay loading_bay1{name="Loadingbay1"; in_belt=join3;}
+  LoadingBay loading_bay1{name="Loadingbay1"; seg_in=join3;}
 }
