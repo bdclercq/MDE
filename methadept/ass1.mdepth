@@ -27,6 +27,8 @@ Model ScheduleModel{
 
 Model Productionsystem imports ScheduleModel{
 
+  enum resultEnum {FIX, DESTROY, ACCEPT}
+
   Node Worker{
     name: String {id};
     schedule: Schedule[1];
@@ -68,7 +70,7 @@ Model Productionsystem imports ScheduleModel{
     seg_in: Belt[0..1];
     seg_out_1: Belt[0..1];
     seg_out_2: Belt[0..1];
-    alternator: Boolean = true;
+    alternator: boolean = true;
   }
 
   Node Join: Belt{ //items must be outputted in order of arrival
@@ -108,8 +110,6 @@ Model Productionsystem imports ScheduleModel{
     out_fix: Belt[0..1];
     out_destroy: Belt[0..1];
     out_accept: Belt[0..1];
-
-    enum resultEnum {FIX, DESTROY, ACCEPT};
   }
 
   Node LoadingBay: Machine{
@@ -142,13 +142,13 @@ Productionsystem PS1{
   Schedule schedule_dogu_1{w_name="Dogu"; planning=[o_dogu_1, m_dogu_1, o_dogu_2];}
   Worker dogu{name="Dogu"; schedule=schedule_dogu_1;}
 
-  Operate o_bo_1{operating_machine="Loadingbay1";duration=4;}
-  Movement m_bo_1{moving_to_machine="Fixer1";}
-  Operate o_bo_2{operating_machine="Fixer1";duration=4;}
-  Movement m_bo_2{moving_to_machine="Incinerator1";}
-  Operate o_bo_3{operating_machine="Incinerator1";duration=4;}
-  Schedule schedule_bo_1{w_name="Bo"; planning=[o_bo_1, m_bo_1, o_bo_2, m_bo_2, o_bo_3];}
-  Worker bo{name="Bo"; schedule=schedule_bo_1;}
+  Operate o_beau_1{operating_machine="Loadingbay1";duration=4;}
+  Movement m_beau_1{moving_to_machine="Fixer1";}
+  Operate o_beau_2{operating_machine="Fixer1";duration=4;}
+  Movement m_beau_2{moving_to_machine="Incinerator1";}
+  Operate o_beau_3{operating_machine="Incinerator1";duration=4;}
+  Schedule schedule_beau_1{w_name="Beau"; planning=[o_beau_1, m_beau_1, o_beau_2, m_beau_2, o_beau_3];}
+  Worker beau{name="Beau"; schedule=schedule_beau_1;}
 
 
   ArrivalCube arrival_cube{name="Arrivalcube1"; seg_out=s1;}
@@ -182,11 +182,11 @@ Productionsystem PS2{
   Schedule schedule_dogu_1{w_name="Dogu"; planning=[o_dogu_1];}
   Worker dogu{name="Dogu"; schedule=schedule_dogu_1;}
 
-  Operate o_bo_1{operating_machine="Inspector1";duration=4;}
-  Movement m_bo_1{moving_to_machine="Inspector2";}
-  Operate o_bo_2{operating_machine="Inspector2";duration=4;}
-  Schedule schedule_bo_1{w_name="Bo"; planning=[o_bo_1, m_bo_1, o_bo_2];}
-  Worker bo{name="Bo"; schedule=schedule_bo_1;}
+  Operate o_beau_1{operating_machine="Inspector1";duration=4;}
+  Movement m_beau_1{moving_to_machine="Inspector2";}
+  Operate o_beau_2{operating_machine="Inspector2";duration=4;}
+  Schedule schedule_beau_1{w_name="Beau"; planning=[o_beau_1, m_beau_1, o_beau_2];}
+  Worker beau{name="Beau"; schedule=schedule_beau_1;}
 
   Operate o_tom_1{operating_machine="Fixer1";duration=4;}
   Movement m_tom_1{moving_to_machine="Fixer2";}
@@ -202,11 +202,11 @@ Productionsystem PS2{
   Schedule schedule_ali_1{w_name="Ali"; planning=[o_ali_1, m_ali_1, o_ali_2];}
   Worker ali{name="Ali"; schedule=schedule_ali_1;}
 
-  ArrivalCube arrival_cube{name="Arrivalcube1"; seg_out=Assembler1;}
-  ArrivalSphere arrival_sphere{name="Arrivalsphere1"; seg_out=Assembler1;}
+  ArrivalCube arrival_cube{name="Arrivalcube1"; seg_out=assembler1;}
+  ArrivalSphere arrival_sphere{name="Arrivalsphere1"; seg_out=assembler1;}
   Assembly assembler1{name="Assembler1"; in_cube=arrival_cube; in_sphere=arrival_sphere; out=join1;}
 
-  Split split1{name="Split1"; seg_in=assembler1; seg_out1=join1; seg_out2=join2;}
+  Split split1{seg_in=assembler1; seg_out_1=join1; seg_out_2=join2;}
 
   Join join1{in_left=split1; in_right=fixer1; out=inspector1;}
   Join join2{in_left=split1; in_right=fixer2; out=inspector1;}
