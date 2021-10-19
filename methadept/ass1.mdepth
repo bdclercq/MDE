@@ -105,11 +105,12 @@ Model Productionsystem imports ScheduleModel{
   }
 
   Node Inspection: Machine{
-    in: Belt[0..1];
+    seg_in: Belt[0..1];
     in_item: Item[0..1];
     out_fix: Belt[0..1];
     out_destroy: Belt[0..1];
     out_accept: Belt[0..1];
+    turn: int=0;
   }
 
   Node LoadingBay: Machine{
@@ -158,7 +159,7 @@ Productionsystem PS1{
 
   Assembly assembler1{name="Assembler1"; in_cube=s1; in_sphere=s2; out=join1;}
   Join join1{in_left=assembler1; in_right=s5; out=inspector1;}
-  Inspection inspector1{name="Inspector1"; in=join1; out_fix=s3; out_destroy=incinerator1; out_accept=s4;}
+  Inspection inspector1{name="Inspector1"; seg_in=join1; out_fix=s3; out_destroy=incinerator1; out_accept=s4;}
 
   Straight s3{seg_in=inspector1; seg_out=fixer1;}
   Straight s4{seg_in=inspector1; seg_out=loading_bay1;}
@@ -212,8 +213,8 @@ Productionsystem PS2{
   Join join2{in_left=split1; in_right=fixer2; out=inspector1;}
   Join join3{in_left=inspector1; in_right=inspector2; out=loading_bay1;}
 
-  Inspection inspector1{name="Inspector1"; in=join1; out_fix=fixer1; out_destroy=incinerator1; out_accept=join3;}
-  Inspection inspector2{name="Inspector2"; in=join2; out_fix=fixer2; out_destroy=incinerator2; out_accept=join3;}
+  Inspection inspector1{name="Inspector1"; seg_in=join1; out_fix=fixer1; out_destroy=incinerator1; out_accept=join3;}
+  Inspection inspector2{name="Inspector2"; seg_in=join2; out_fix=fixer2; out_destroy=incinerator2; out_accept=join3;}
 
   Fixer fixer1{name="Fixer1"; in_belt=inspector1; out_belt=join1;}
   Fixer fixer2{name="Fixer2"; in_belt=inspector2; out_belt=join2;}
